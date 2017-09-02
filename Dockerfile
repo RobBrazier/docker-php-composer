@@ -1,6 +1,5 @@
 FROM php:alpine
 
 RUN \
-  apk add composer --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && \
-  composer global require hirak/prestissimo --no-progress
-
+  apk add composer sudo --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && \
+  sh install.sh
