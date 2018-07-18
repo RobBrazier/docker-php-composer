@@ -16,6 +16,7 @@ echo "    plugins:"
 echo "      docker-login#v1.0.0:"
 echo "        username: robbrazier"
 echo "      docker-compose#v2.5.0:"
+echo "        no-cache: true"
 echo "        push:"
 echo "          - builder:$DOCKER_INDEX:builder"
 
