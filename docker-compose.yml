@@ -6,31 +6,21 @@ services:
       context: ./builder
   php56:
     image: robbrazier/php:5.6
-    depends_on: 
-      - builder
     build:
       context: ./5.6
   php70:
     image: robbrazier/php:7.0
-    depends_on:
-      - builder
     build:
       context: ./7.0
   php71:
     image: robbrazier/php:7.1
-    depends_on:
-      - builder
     build:
       context: ./7.1
   php72:
     image: robbrazier/php:7.2
-    depends_on:
-      - builder
     build:
       context: ./7.2
   phplatest:
     image: robbrazier/php:latest
-    depends_on:
-      - builder
     build:
       context: ./latest
