@@ -2,7 +2,8 @@
 
 set -eu
 
-declare -a PHP_VERSIONS=(5.5)# 5.6 7.0 7.1 7.2 latest)
+declare -a PHP_VERSIONS=(5.5) 
+# 5.6 7.0 7.1 7.2 latest)
 DOCKER_INDEX="index.docker.io/robbrazier/php"
 
 echo "steps:"
