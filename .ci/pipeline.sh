@@ -25,6 +25,7 @@ for phpver in ${PHP_VERSIONS[@]}; do
     echo "  - label: 'Build :php: $phpver'"
     echo "    plugins:"
     echo "      docker-compose#v2.5.0:"
+    echo "        no-cache: true"
     echo "        build: php${phpver//\./}"
 done
 echo "  - wait"
@@ -37,5 +38,5 @@ for phpver in ${PHP_VERSIONS[@]}; do
     echo "        password-env: DOCKER_LOGIN_PASSWORD"
     # echo "      docker-compose#v2.5.0:"
     # echo "        push:"
-    # echo "          - $SERVICE_NAME:$DOCKER_INDEX:$phpver-test"
+    # echo "          - $SERVICE_NAME:$DOCKER_INDEX:$phpver"
 done
