@@ -9,6 +9,7 @@ echo "  - label: ':php: builder'"
 echo "    plugins:"
 echo "      docker-compose#v2.5.0:"
 echo "        build: builder"
+echo "  - wait"
 for phpver in ${PHP_VERSIONS[@]}; do
     echo "  - label: ':php: $phpver'"
     echo "    plugins:"
