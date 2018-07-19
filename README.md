@@ -30,4 +30,4 @@ This Image uses the same entrypoint and command as the official `php` image (i.e
 The default working directory is set to `/var/app`, however this can be easily modified.
 
 ## Automated Builds
-This repository is set to build every month
+This repository is set to build every month, so that the images are updated with the latest versions of composer, prestissimo and php
