@@ -17,6 +17,7 @@ echo "  - wait"
 for phpver in ${PHP_VERSIONS[@]}; do
     SERVICE_NAME="php${phpver//\./}"
     echo "  - label: 'Push :php: $phpver'"
+    echo "    branches: 'master'"
     echo "    plugins:"
     echo "      docker-login#v2.0.0:"
     echo "        username: robbrazier"
