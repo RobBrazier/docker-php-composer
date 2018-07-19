@@ -1,30 +1,32 @@
-version: '2'
+version: '3'
 services:
-  builder:
-    image: robbrazier/php:builder
-    build:
-      context: ./builder
   php55:
-    image: robbrazier/php:5.6
+    image: robbrazier/php:5.5
     build:
-      context: ./5.5
+      context: .
+      dockerfile: ./5.5/Dockerfile
   php56:
     image: robbrazier/php:5.6
     build:
-      context: ./5.6
+      context: .
+      dockerfile: ./5.6/Dockerfile
   php70:
     image: robbrazier/php:7.0
     build:
-      context: ./7.0
+      context: .
+      dockerfile: ./7.0/Dockerfile
   php71:
     image: robbrazier/php:7.1
     build:
-      context: ./7.1
+      context: .
+      dockerfile: ./7.1/Dockerfile
   php72:
     image: robbrazier/php:7.2
     build:
-      context: ./7.2
+      context: .
+      dockerfile: ./7.2/Dockerfile
   phplatest:
     image: robbrazier/php:latest
     build:
-      context: ./latest
+      context: .
+      dockerfile: ./latest/Dockerfile
