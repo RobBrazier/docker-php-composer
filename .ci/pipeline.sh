@@ -22,7 +22,7 @@ for phpver in ${PHP_VERSIONS[@]}; do
     echo "      docker-login#v2.0.0:"
     echo "        username: robbrazier"
     echo "        password-env: DOCKER_LOGIN_PASSWORD"
-    # echo "      docker-compose#v2.5.0:"
-    # echo "        push:"
-    # echo "          - $SERVICE_NAME:$DOCKER_INDEX:$phpver"
+    echo "      docker-compose#v2.5.0:"
+    echo "        push:"
+    echo "          - $SERVICE_NAME:$DOCKER_INDEX:$phpver"
 done
