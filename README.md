@@ -10,8 +10,8 @@ There is a tag for each directory contained within this repository (see [here](h
 ## Environment Variables
 To avoid user permission errors when running this container with a mounted volume, there are two environment variables that can be set:
 ```bash
-PUID=1001 # User ID [default: www-data]
-PGID=1001 # Group ID [ default: www-data]
+PUID=1001 # User ID [default: root]
+PGID=1001 # Group ID [ default: root]
 ```
 
 Usually this will be set to the User ID and Group ID of your current user.

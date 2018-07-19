@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-PUID=${PUID:-www-data}
-PGID=${PGID:-www-data}
+PUID=${PUID:-root}
+PGID=${PGID:-root}
 
 chown -R $PUID:$PGID $COMPOSER_HOME
 
