@@ -1,0 +1,13 @@
+version: v1.0
+name: Push images to Docker Hub
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Push
+    task:
+      jobs:
+        - name: 'Docker Push'
+          commands:
+            - docker images

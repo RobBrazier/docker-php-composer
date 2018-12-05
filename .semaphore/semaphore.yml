@@ -6,7 +6,7 @@ agent:
     os_image: ubuntu1804
 
 blocks:
-  - name: "Build"
+  - name: Docker Build
     task:
       jobs:
       - name: Build
@@ -25,10 +25,10 @@ blocks:
               - "7.2"
               - "7.3"
 
-  - name: "Push Image"
-    task:
-      jobs:
-      - name: Push
-        commands:
-          - checkout
-          - echo "make docker.push"
+promotions:
+  - name: Docker Push
+    pipeline_file: docker-push.yml
+    auto_promote_on:
+      - result: passed
+        # branch:
+        #   - master
