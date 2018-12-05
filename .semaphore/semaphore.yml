@@ -9,11 +9,11 @@ blocks:
   - name: "Build"
     task:
       jobs:
-      - name: Docker build
+      - name: Build
         commands:
           - checkout
-          - cd $PHP_VERSION
-          - docker-compose build php${PHP_VERSION//\./}
+          - docker build -t robbrazier/php:$PHP_VERSION $PHP_VERSION
+          # - docker-compose build php${PHP_VERSION//\./}
         matrix:
           - env_var: PHP_VERSION
             values:
