@@ -12,7 +12,7 @@ blocks:
       - name: Build
         commands:
           - checkout
-          - docker build -t robbrazier/php:$PHP_VERSION $PHP_VERSION
+          - docker build -f $PHP_VERSION/Dockerfile -t robbrazier/php:$PHP_VERSION .
           # - docker-compose build php${PHP_VERSION//\./}
         matrix:
           - env_var: PHP_VERSION
