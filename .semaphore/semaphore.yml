@@ -19,7 +19,7 @@ blocks:
           - checkout
           - cache delete $PHP_VERSION
           - docker build -f $PHP_VERSION/Dockerfile -t robbrazier/php:$PHP_VERSION .
-          - docker save robbrazier/php:$PHP_VERSION | sudo docker-squash -t $PHP_VERSION > php-$PHP_VERSION.tar
+          - docker save robbrazier/php:$PHP_VERSION | sudo docker-squash -verbose -from root > php-$PHP_VERSION.tar
           - cache store $PHP_VERSION php-$PHP_VERSION.tar
         matrix:
           - env_var: PHP_VERSION
