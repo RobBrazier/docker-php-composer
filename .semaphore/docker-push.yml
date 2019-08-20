@@ -17,6 +17,16 @@ blocks:
       jobs:
         - name: 'Docker Push'
           commands:
-            - cache restore 7.3
-            - cat php-7.3.tar | sudo docker-squash -t jwilder/whoami:squash -verbose -from root | docker load
+            - cache restore $PHP_VERSION
+            - docker load -i php-$PHP_VERSION.tar
             - docker images
+          matrix:
+            - env_var: PHP_VERSION
+              values:
+                - latest
+                - "5.5"
+                - "5.6"
+                - "7.0"
+                - "7.1"
+                - "7.2"
+                - "7.3"
