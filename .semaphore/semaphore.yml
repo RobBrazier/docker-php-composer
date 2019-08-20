@@ -1,5 +1,4 @@
 version: v1.0
-name: robbrazier/php Docker image pipeline
 agent:
   machine:
     type: e1-standard-2
@@ -13,7 +12,8 @@ blocks:
         commands:
           - checkout
           - docker build -f $PHP_VERSION/Dockerfile -t robbrazier/php:$PHP_VERSION .
-          # - docker-compose build php${PHP_VERSION//\./}
+          - docker save robbrazier/php:$PHP_VERSION > php-$PHP_VERSION.tar.gz
+          - cache store $PHP_VERSION php-$PHP_VERSION.tar.gz
         matrix:
           - env_var: PHP_VERSION
             values:

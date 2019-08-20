@@ -10,4 +10,6 @@ blocks:
       jobs:
         - name: 'Docker Push'
           commands:
+            - cache restore 7.3
+            - docker load < php-7.3.tar.gz
             - docker images
