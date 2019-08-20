@@ -1,9 +1,16 @@
 version: v1.0
-name: Push images to Docker Hub
+
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+
+global_job_config:
+  prologue:
+    commands:
+      - wget https://github.com/jwilder/docker-squash/releases/download/v0.2.0/docker-squash-linux-amd64-v0.2.0.tar.gz
+      - sudo tar -C /usr/local/bin -xzvf docker-squash-linux-amd64-v0.2.0.tar.gz
+
 blocks:
   - name: Push
     task:
@@ -11,5 +18,5 @@ blocks:
         - name: 'Docker Push'
           commands:
             - cache restore 7.3
-            - docker load -i php-7.3.tar
+            - cat php-7.3.tar | sudo docker-squash -t jwilder/whoami:squash -verbose -from root | docker load
             - docker images
