@@ -11,5 +11,5 @@ blocks:
         - name: 'Docker Push'
           commands:
             - cache restore 7.3
-            - docker load < php-7.3.tar
+            - docker load -i php-7.3.tar
             - docker images
