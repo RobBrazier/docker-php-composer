@@ -11,7 +11,7 @@ docker tag "$IMAGE_NAME:$PHP_VERSION" "$IMAGE_NAME:$FULL_PHP_VERSION"
 if docker_tag_exists $FULL_PHP_VERSION; then
    echo "No version change - Skipping push." 
 else
-    if [[ "$PHP_VERSION" -ne "latest" ]]; then
+    if ! [[ "$PHP_VERSION" == "latest" ]]; then
         docker push "$IMAGE_NAME:$FULL_PHP_VERSION"
     fi
     docker push "$IMAGE_NAME:$PHP_VERSION"
