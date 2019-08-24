@@ -5,23 +5,11 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 
-# global_job_config:
-#   prologue:
-#     commands:
-#       - wget https://github.com/jwilder/docker-squash/releases/download/v0.2.0/docker-squash-linux-amd64-v0.2.0.tar.gz
-#       - sudo tar -C /usr/local/bin -xzvf docker-squash-linux-amd64-v0.2.0.tar.gz
-
 blocks:
   - name: Push
     task:
       jobs:
         - name: 'Docker Push'
-          commands:
-            - checkout
-            - cache restore $PHP_VERSION
-            - export IMAGE_NAME="robbrazier/php"
-            - docker load -i php-$PHP_VERSION.tar
-            - bash .semaphore/push_image
           matrix:
             - env_var: PHP_VERSION
               values:
@@ -31,3 +19,15 @@ blocks:
                 - "7.1"
                 - "7.2"
                 - "7.3"
+          secrets:
+            - name: dockerhub-secrets
+          prologue:
+            commands:
+              # Authenticate to the registry for all jobs in the block
+              - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+          commands:
+            - checkout
+            - cache restore $PHP_VERSION-$SEMAPHORE_GIT_SHA
+            - export IMAGE_NAME="robbrazier/php"
+            - docker load -i php-$PHP_VERSION.tar
+            - bash .semaphore/push_image
