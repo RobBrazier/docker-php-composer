@@ -1,63 +1,34 @@
 version: v1.0
-name: First pipeline example
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 
 blocks:
-  - name: "Build"
-    task:
-      env_vars:
-        - name: APP_ENV
-          value: prod
-      jobs:
-      - name: Docker build
-        commands:
-          - checkout
-          - ls -1
-          - echo $APP_ENV
-          - echo "Docker build..."
-          - echo "done"
-
-  - name: "Smoke tests"
+  - name: Docker Build
     task:
       jobs:
-      - name: Smoke
+      - name: Build
+        matrix:
+          - env_var: PHP_VERSION
+            values:
+              - latest
+              - "5.6"
+              - "7.0"
+              - "7.1"
+              - "7.2"
+              - "7.3"
         commands:
           - checkout
-          - echo "make smoke"
+          - docker build -f $PHP_VERSION/Dockerfile -t robbrazier/php:$PHP_VERSION .
+          - docker images
+          - docker save robbrazier/php:$PHP_VERSION > php-$PHP_VERSION.tar
+          - cache store $PHP_VERSION-$SEMAPHORE_GIT_SHA php-$PHP_VERSION.tar
 
-  - name: "Unit tests"
-    task:
-      jobs:
-      - name: RSpec
-        commands:
-          - checkout
-          - echo "make rspec"
-
-      - name: Lint code
-        commands:
-          - checkout
-          - echo "make lint"
-
-      - name: Check security
-        commands:
-          - checkout
-          - echo "make security"
-
-  - name: "Integration tests"
-    task:
-      jobs:
-      - name: Cucumber
-        commands:
-          - checkout
-          - echo "make cucumber"
-
-  - name: "Push Image"
-    task:
-      jobs:
-      - name: Push
-        commands:
-          - checkout
-          - echo "make docker.push"
+promotions:
+  - name: Docker Push
+    pipeline_file: docker-push.yml
+    auto_promote_on:
+      - result: passed
+        branch:
+          - master

@@ -1,0 +1,33 @@
+version: v1.0
+
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Push
+    task:
+      jobs:
+        - name: 'Docker Push'
+          matrix:
+            - env_var: PHP_VERSION
+              values:
+                - latest
+                - "5.6"
+                - "7.0"
+                - "7.1"
+                - "7.2"
+                - "7.3"
+          secrets:
+            - name: dockerhub-secrets
+          prologue:
+            commands:
+              # Authenticate to the registry for all jobs in the block
+              - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+          commands:
+            - checkout
+            - cache restore $PHP_VERSION-$SEMAPHORE_GIT_SHA
+            - export IMAGE_NAME="robbrazier/php"
+            - docker load -i php-$PHP_VERSION.tar
+            - bash .semaphore/push_image
