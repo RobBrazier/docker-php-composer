@@ -7,10 +7,12 @@ function docker_tag_exists() {
 }
 
 FULL_PHP_VERSION="$(docker run -it $IMAGE_NAME:$PHP_VERSION --version | egrep 'PHP [0-9\.]+' | awk -F' ' '{ print $2 }')"
-docker tag $IMAGE_NAME:$PHP_VERSION $IMAGE_NAME:$FULL_PHP_VERSION
+docker tag "$IMAGE_NAME:$PHP_VERSION" "$IMAGE_NAME:$FULL_PHP_VERSION"
 if docker_tag_exists $FULL_PHP_VERSION; then
    echo "No version change - Skipping push." 
 else
-    docker push $IMAGE_NAME:$PHP_VERSION
-    docker push $IMAGE_NAME:$FULL_PHP_VERSION
+    if [[ "$PHP_VERSION" -ne "latest" ]]; then
+        docker push "$IMAGE_NAME:$FULL_PHP_VERSION"
+    fi
+    docker push "$IMAGE_NAME:$PHP_VERSION"
 fi
