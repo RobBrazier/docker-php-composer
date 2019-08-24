@@ -18,8 +18,9 @@ blocks:
         - name: 'Docker Push'
           commands:
             - cache restore $PHP_VERSION
+            - export IMAGE_NAME="robbrazier/php"
             - docker load -i php-$PHP_VERSION.tar
-            - docker images
+            - bash .semaphore/push_image
           matrix:
             - env_var: PHP_VERSION
               values:
