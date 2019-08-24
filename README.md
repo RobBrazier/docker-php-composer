@@ -1,4 +1,4 @@
-# docker-php-composer [![Build status](https://badge.buildkite.com/4b3e2548ef098036a3b6aaf986caceede9f4b8d255fe9b01aa.svg?branch=master)](https://buildkite.com/robbrazier/docker-php-composer) [![Docker Pulls](https://img.shields.io/docker/pulls/robbrazier/php.svg)](https://hub.docker.com/r/robbrazier/php/)
+# docker-php-composer [![Docker Pulls](https://img.shields.io/docker/pulls/robbrazier/php.svg)](https://hub.docker.com/r/robbrazier/php/)
 ### A Docker Image with [composer](https://getcomposer.org/) and [prestissimo](https://github.com/hirak/prestissimo) preinstalled
 
 ## Usage

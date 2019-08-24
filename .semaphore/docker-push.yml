@@ -8,6 +8,12 @@ agent:
 blocks:
   - name: Push
     task:
+      secrets:
+        - name: dockerhub-secrets
+      prologue:
+        commands:
+          # Authenticate to the registry for all jobs in the block
+          - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
       jobs:
         - name: 'Docker Push'
           matrix:
@@ -19,12 +25,6 @@ blocks:
                 - "7.1"
                 - "7.2"
                 - "7.3"
-          secrets:
-            - name: dockerhub-secrets
-          prologue:
-            commands:
-              # Authenticate to the registry for all jobs in the block
-              - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
           commands:
             - checkout
             - cache restore $PHP_VERSION-$SEMAPHORE_GIT_SHA
