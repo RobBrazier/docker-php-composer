@@ -18,6 +18,7 @@ blocks:
               - "7.1"
               - "7.2"
               - "7.3"
+              - "7.4"
         commands:
           - checkout
           - docker build -f $PHP_VERSION/Dockerfile -t robbrazier/php:$PHP_VERSION .
