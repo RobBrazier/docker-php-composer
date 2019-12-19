@@ -1,4 +1,4 @@
-FROM php:5.6-alpine
+FROM php:7.4.1-alpine
 
 COPY .common /tmp
 
