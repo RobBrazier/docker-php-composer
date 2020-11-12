@@ -1,11 +1,14 @@
 # docker-php-composer [![Docker Pulls](https://img.shields.io/docker/pulls/robbrazier/php.svg)](https://hub.docker.com/r/robbrazier/php/)
-### A Docker Image with [composer](https://getcomposer.org/) and [prestissimo](https://github.com/hirak/prestissimo) preinstalled
+### A Docker Image with [composer](https://getcomposer.org/) preinstalled
 
 ## Usage
 ```bash
 docker pull robbrazier/php:${version}
 ```
 There is a tag for each directory contained within this repository (see [here](https://hub.docker.com/r/robbrazier/php/tags/) for a full list of tags)
+
+## NOTICE
+> Prestissimo is no longer installed as composer v2 is much faster - Prestissimo is no longer supported with composer v2 - see [](https://github.com/hirak/prestissimo) 
 
 ## Environment Variables
 To avoid user permission errors when running this container with a mounted volume, there are two environment variables that can be set:
