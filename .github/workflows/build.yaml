@@ -30,6 +30,7 @@ jobs:
           path: php-${{ matrix.php }}.tar
 
   publish_image:
+    needs: build_image
     strategy:
       fail-fast: true
       matrix:
