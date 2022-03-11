@@ -55,7 +55,8 @@ jobs:
       - name: Get Full PHP Version
         id: full_php_version
         run:
-          echo ::set-output name=version::$(docker run -it $IMAGE_NAME:${{ matrix.php }} --version | egrep 'PHP [0-9\.]+' | awk -F' ' '{ print $2 }'))
+          full_version="$(docker run -it $IMAGE_NAME:${{ matrix.php }} --version | egrep 'PHP [0-9\.]+' | awk -F' ' '{ print $2 }')"
+          echo ::set-output name=version::$full_version
 
       - name: Is image up-to-date
         id: image_status
