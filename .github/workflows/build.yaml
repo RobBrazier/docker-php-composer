@@ -41,10 +41,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set Image Name
-        run: echo "IMAGE_NAME=robbrazier/php" >> $GITHUB_ENV
-
-      - name: Checkout Repo
-        uses: actions/checkout@v3
+        run: |
+          username="robbrazier"
+          echo "DOCKER_USERNAME=$username" >> $GITHUB_ENV
+          echo "IMAGE_NAME=$username/php" >> $GITHUB_ENV
 
       - name: Download Image
         uses: actions/download-artifact@v3
@@ -73,8 +73,10 @@ jobs:
 
       - name: Push Image
         if: steps.image_status.outputs.up_to_date == 'false'
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           if ! [[ "${{ matrix.php }}" == "latest" ]]; then
-              echo docker push "$IMAGE_NAME:${{ steps.full_php_version.outputs.version }}"
+              docker push "$IMAGE_NAME:${{ steps.full_php_version.outputs.version }}"
           fi
-          echo docker push "$IMAGE_NAME:${{ matrix.php }}"
+          docker push "$IMAGE_NAME:${{ matrix.php }}"
