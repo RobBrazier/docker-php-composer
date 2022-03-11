@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  unit_tests:
+  build_image:
     strategy:
       fail-fast: true
       matrix:
@@ -22,3 +22,51 @@ jobs:
           docker build -f ${{ matrix.php }}/Dockerfile -t robbrazier/php:${{ matrix.php }} .
           docker images
           docker save robbrazier/php:${{ matrix.php }} > php-${{ matrix.php }}.tar
+
+      - name: Upload Image
+        uses: actions/upload-artifact@v3
+        with:
+          name: php-${{ matrix.php }}
+          path: php-${{ matrix.php }}.tar
+
+  publish_image:
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [ "latest", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4" ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Image Name
+        run: echo "IMAGE_NAME=robbrazier/php" >> $GITHUB_ENV
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Download Image
+        uses: actions/download-artifact@v3
+        with:
+          name: php-${{ matrix.php }}
+
+      - name: Load Image
+        run: docker load -i php-${{ matrix.php }}.tar
+
+      - name: Get Full PHP Version
+        id: full_php_version
+        run:
+          echo ::set-output name=version::$(docker run -it $IMAGE_NAME:${{ matrix.php }} --version | egrep 'PHP [0-9\.]+' | awk -F' ' '{ print $2 }'))
+
+      - name: Is image up-to-date
+        id: image_status
+        run: |
+          if curl --silent -f -lSL https://index.docker.io/v1/repositories/$IMAGE_NAME/tags/${{ steps.full_php_version.outputs.version }} > /dev/null; then
+            echo ::set-output name=up_to_date::true
+          else
+            echo ::set-output name=up_to_date::false
+
+      - name: Push Image
+        if: steps.image_status.outputs.up_to_date == 'false'
+        run: |
+          if ! [[ "${{ matrix.php }}" == "latest" ]]; then
+              echo docker push "$IMAGE_NAME:${{ steps.full_php_version.outputs.version }}"
+          fi
+          echo docker push "$IMAGE_NAME:${{ matrix.php }}"
