@@ -72,7 +72,7 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v2
-        if: steps.image_status.outputs.up_to_date == "true"
+        if: steps.image_status.outputs.up_to_date == 'true'
         with:
           context: .
           pull: true
