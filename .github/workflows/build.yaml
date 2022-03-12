@@ -71,12 +71,21 @@ jobs:
             echo ::set-output name=up_to_date::false
           fi
 
-      - name: Push Image
-        if: steps.image_status.outputs.up_to_date == 'false'
-        env:
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          if ! [[ "${{ matrix.php }}" == "latest" ]]; then
-              docker push "$IMAGE_NAME:${{ steps.full_php_version.outputs.version }}"
-          fi
-          docker push "$IMAGE_NAME:${{ matrix.php }}"
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: robbrazier
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        if: matrix.php != "latest"
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: $IMAGE_NAME:${{ steps.full_php_version.outputs.version }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: $IMAGE_NAME:${{ matrix.php }}
