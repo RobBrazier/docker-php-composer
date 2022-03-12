@@ -78,7 +78,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push
-        if: matrix.php != "latest"
+        if: matrix.php != 'latest'
         uses: docker/build-push-action@v2
         with:
           push: true
