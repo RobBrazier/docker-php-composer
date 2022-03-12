@@ -5,7 +5,7 @@
 ```bash
 docker pull robbrazier/php:${version}
 ```
-There is a tag for each directory contained within this repository (see [here](https://hub.docker.com/r/robbrazier/php/tags/) for a full list of tags)
+All future tags now run off the single root Dockerfile (see [here](https://hub.docker.com/r/robbrazier/php/tags/) for a full list of available tags/versions)
 
 ## NOTICE
 > Prestissimo is no longer installed as composer v2 is much faster - Prestissimo is no longer supported with composer v2 - see [](https://github.com/hirak/prestissimo) 
@@ -33,4 +33,4 @@ This Image uses the same entrypoint and command as the official `php` image (i.e
 The default working directory is set to `/var/app`, however this can be easily modified.
 
 ## Automated Builds
-This repository is set to build every month, so that the images are updated with the latest versions of composer, prestissimo and php
+This repository is set to build every month, so that the images are updated with the latest versions of composer and php
