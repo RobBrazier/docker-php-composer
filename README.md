@@ -1,4 +1,4 @@
-# docker-php-composer [![Docker Pulls](https://img.shields.io/docker/pulls/robbrazier/php.svg)](https://hub.docker.com/r/robbrazier/php/)
+# docker-php-composer [![Docker Pulls](https://img.shields.io/docker/pulls/robbrazier/php.svg?style=flat-square)](https://hub.docker.com/r/robbrazier/php/) [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/RobBrazier/docker-php-composer/Build%20and%20Test?style=flat-square)](https://github.com/RobBrazier/docker-php-composer/actions)
 ### A Docker Image with [composer](https://getcomposer.org/) preinstalled
 
 ## Usage
