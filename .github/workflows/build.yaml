@@ -19,73 +19,64 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Build Image
+      - name: Set FROM Image version
+        id: image_version
         run: |
-          docker build -f ${{ matrix.php }}/Dockerfile -t robbrazier/php:${{ matrix.php }} .
-          docker images
-          docker save robbrazier/php:${{ matrix.php }} > php-${{ matrix.php }}.tar
-
-      - name: Upload Image
-        uses: actions/upload-artifact@v3
-        with:
-          name: php-${{ matrix.php }}
-          path: php-${{ matrix.php }}.tar
-
-  publish_image:
-    needs: build_image
-    if: github.repository == 'RobBrazier/docker-php-composer' && (github.ref_name == 'master')
-    strategy:
-      fail-fast: true
-      matrix:
-        php: [ "latest", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0" ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set Image Name
-        run: |
-          username="robbrazier"
-          echo "DOCKER_USERNAME=$username" >> $GITHUB_ENV
-          echo "IMAGE_NAME=$username/php" >> $GITHUB_ENV
-
-      - name: Download Image
-        uses: actions/download-artifact@v3
-        with:
-          name: php-${{ matrix.php }}
-
-      - name: Load Image
-        run: docker load -i php-${{ matrix.php }}.tar
+          if [[ "${{ matrix.php }}" != "latest" ]]; then
+            echo ::set-output name=version::${{ matrix.php }}-alpine
+          else
+            echo ::set-output name=version::alpine
+          fi
 
       - name: Get Full PHP Version
         id: full_php_version
         run: |
-          docker run $IMAGE_NAME:${{ matrix.php }} --version | egrep 'PHP [0-9\.]+' | awk -F' ' '{ print $2 }'
-          full_version="$(docker run $IMAGE_NAME:${{ matrix.php }} --version | egrep 'PHP [0-9\.]+' | awk -F' ' '{ print $2 }')"
-          echo $full_version
-          echo ::set-output name=version::$full_version
-
-      - name: Is image up-to-date
-        id: image_status
-        run: |
-          if curl --silent -f -lSL https://index.docker.io/v1/repositories/$IMAGE_NAME/tags/${{ steps.full_php_version.outputs.version }} > /dev/null; then
-            echo ::set-output name=up_to_date::true
+          if [[ "${{ matrix.php }}" != "latest" ]]; then
+            full_version="$(docker run php:${{ matrix.php }}-alpine --version | egrep 'PHP [0-9\.]+' | awk -F' ' '{ print $2 }')"
+            echo ::set-output name=version::$full_version
+            echo ::set-output name=tag_version::true
           else
-            echo ::set-output name=up_to_date::false
+            echo ::set-output name=tag_version::false
           fi
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: robbrazier/php
+          tags: |
+            type=raw,${{ matrix.php }}
+            type=raw,${{ steps.full_php_version.outputs.version }},enable=${{ steps.full_php_version.outputs.tag_version }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Login to DockerHub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
           username: robbrazier
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push
-        if: matrix.php != 'latest'
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: $IMAGE_NAME:${{ steps.full_php_version.outputs.version }}
+#      - name: Is image up-to-date
+#        id: image_status
+#        run: |
+#          if curl --silent -f -lSL https://index.docker.io/v1/repositories/robbrazier/php/tags/${{ steps.full_php_version.outputs.version }} > /dev/null; then
+#            echo ::set-output name=up_to_date::true
+#          else
+#            echo ::set-output name=up_to_date::false
+#          fi
 
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          push: true
-          tags: $IMAGE_NAME:${{ matrix.php }}
+          context: .
+          pull: true
+          push: false #${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            IMAGE_VERSION=${{ steps.image_version.outputs.version }}
