@@ -8,7 +8,7 @@ docker pull robbrazier/php:${version}
 All future tags now run off the single root Dockerfile (see [here](https://hub.docker.com/r/robbrazier/php/tags/) for a full list of available tags/versions)
 
 ## NOTICE
-> Prestissimo is no longer installed as composer v2 is much faster - Prestissimo is no longer supported with composer v2 - see [](https://github.com/hirak/prestissimo) 
+> Prestissimo is no longer installed as composer v2 is much faster - Prestissimo is no longer supported with composer v2 - see [https://github.com/hirak/prestissimo](https://github.com/hirak/prestissimo) 
 
 ## Environment Variables
 To avoid user permission errors when running this container with a mounted volume, there are two environment variables that can be set:
